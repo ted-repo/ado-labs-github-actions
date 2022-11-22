@@ -41,6 +41,7 @@ jobs:
         CONTAINER_NAME: ${{ secrets.CONTAINER_NAME }}
       run: terraform init -backend-config="storage_account_name=$STORAGE_ACCOUNT" -backend-config="container_name=$CONTAINER_NAME" -backend-config="resource_group_name=$RESOURCE_GROUP"
 
+    # pending code to check formatting and validation
 
     # Run a terraform plan for pull requests only
     - name: Terraform Plan
@@ -50,14 +51,14 @@ jobs:
         ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
         ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
         ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-      if: github.event_name == 'pull_request'
+      if: github.event_name == 'pull_request' #condition to run terraform plan
       run: terraform plan -no-color
     
     # Add a comment to pull requests with plan results
     - name: add-plan-comment
       id: comment
       uses: actions/github-script@v3
-      if: github.event_name == 'pull_request'
+      if: github.event_name == 'pull_request' #condition to add a comment to the pull request
       env:
         PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
       with:
@@ -85,10 +86,10 @@ jobs:
 
       # On push to main, build or change infrastructure according to Terraform configuration files
     - name: Terraform Apply
-      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push' #conditional which runs if there is a merge into the main branch
       env:
         ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
         ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
         ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
         ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-      run: terraform apply -auto-approve
+      run: terraform apply -auto-approve #apply the changes to the destination environment
