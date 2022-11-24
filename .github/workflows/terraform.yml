@@ -22,24 +22,11 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    # Install the preferred version of Terraform CLI 
+    # Install the preferred (latest) version of Terraform CLI 
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
       #with:
         #terraform_version: 1.0.10
-
-    # Testing if the env variables are accessible
-    - name: Checking env var
-      #id: init
-      env:
-        ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-        ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-        ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-        ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-        RESOURCE_GROUP: ${{ secrets.RESOURCE_GROUP }}
-        STORAGE_ACCOUNT: ${{ secrets.STORAGE_ACCOUNT }}
-        CONTAINER_NAME: ${{ secrets.CONTAINER_NAME }}
-      run: echo ARM_CLIENT_ID 
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
@@ -54,4 +41,3 @@ jobs:
         CONTAINER_NAME: ${{ secrets.CONTAINER_NAME }}
       run: terraform init -backend-config="storage_account_name=$STORAGE_ACCOUNT" -backend-config="container_name=$CONTAINER_NAME" -backend-config="resource_group_name=$RESOURCE_GROUP"
 
-# would test terraform workflow sequentuially..

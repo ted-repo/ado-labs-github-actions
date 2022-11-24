@@ -1,6 +1,5 @@
 #exclude azure config file
 *.conf
-.terraform.lock.hcl
 
 # Local .terraform directories
 **/.terraform/*
