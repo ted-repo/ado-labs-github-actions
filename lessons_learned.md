@@ -8,6 +8,8 @@ Lessons learned during practice:
 
 - Another great helpful guide, although it is for azure devops, it still related to Github actions: https://julie.io/writing/terraform-on-azure-pipelines-best-practices/
 
+- This guide tells you are you creating github actions secrets: https://gmusumeci.medium.com/deploying-terraform-in-azure-using-github-actions-step-by-step-bf8804b17711
+
 
 Thurs Nov 24 2022
 While troubleshooting I realized that the backend configuration is unable to authenticate 
