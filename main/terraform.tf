@@ -9,12 +9,10 @@ terraform {
       source = "hashicorp/azurerm"
       version = "3.32.0"
     }
-  }
-}
 
-terraform {
-  backend "azurerm" {
+    backend "azurerm" {
     key = "app.terraform.tfstate"
+  }
   }
 }
 
