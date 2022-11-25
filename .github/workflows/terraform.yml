@@ -60,10 +60,10 @@ jobs:
       uses: actions/github-script@v3
       if: github.event_name == 'pull_request' #condition to add a comment to the pull request
       env:
-        PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+        PLAN: "terraform\n${{ steps.plan.outputs.stdout }}" #storing the output of the plan step in a 'PLAN' variable
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        script: |
+        script: | # this script post a comment to the PR with the output of the previous terraform stages using GITHUB_TOKEN
           const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
           #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
           #### Terraform Validation 🤖${{ steps.validate.outputs.stdout }}
