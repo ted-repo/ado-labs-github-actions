@@ -20,13 +20,13 @@ jobs:
     steps:
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
-    # Install the preferred version of Terraform CLI 
+    # Install the preferred (latest) version of Terraform CLI 
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
-      with:
-        terraform_version: 1.0.10
+      #with:
+        #terraform_version: 1.0.10
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
@@ -41,7 +41,7 @@ jobs:
         CONTAINER_NAME: ${{ secrets.CONTAINER_NAME }}
       run: terraform init -backend-config="storage_account_name=$STORAGE_ACCOUNT" -backend-config="container_name=$CONTAINER_NAME" -backend-config="resource_group_name=$RESOURCE_GROUP"
 
-    # pending code to check formatting and validation
+# pending code to check formatting and validation
 
     # Run a terraform plan for pull requests only
     - name: Terraform Plan
@@ -60,10 +60,10 @@ jobs:
       uses: actions/github-script@v3
       if: github.event_name == 'pull_request' #condition to add a comment to the pull request
       env:
-        PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+        PLAN: "terraform\n${{ steps.plan.outputs.stdout }}" #storing the output of the plan step in a 'PLAN' variable
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        script: |
+        script: | # this script post a comment to the PR with the output of the previous terraform stages using GITHUB_TOKEN
           const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
           #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
           #### Terraform Validation 🤖${{ steps.validate.outputs.stdout }}
