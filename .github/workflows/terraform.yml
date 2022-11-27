@@ -28,19 +28,6 @@ jobs:
       #with:
         #terraform_version: 1.0.10
 
-    # Check Terraform format on feature branches: returns 0 for no formatting problems and 1 for formatting problems.
-    - name: Terraform Format
-      id: fmt
-      if: github.ref != 'refs/heads/main' #if the branch is not main
-      run:  terraform fmt -check
-
-    # Terraform validate on  feature branches
-    - name: Terraform Validate
-      id: validate
-      if: github.ref != 'refs/heads/main'
-            && (success() || failure()) #it runs this command if the previous step was successful or not
-      run:  terraform validate -no-color
-
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
       id: init
@@ -53,6 +40,19 @@ jobs:
         STORAGE_ACCOUNT: ${{ secrets.STORAGE_ACCOUNT }}
         CONTAINER_NAME: ${{ secrets.CONTAINER_NAME }}
       run: terraform init -backend-config="storage_account_name=$STORAGE_ACCOUNT" -backend-config="container_name=$CONTAINER_NAME" -backend-config="resource_group_name=$RESOURCE_GROUP"
+
+    # Check Terraform format on feature branches: returns 0 for no formatting problems and 1 for formatting problems.
+    - name: Terraform Format
+      id: fmt
+      if: github.ref != 'refs/heads/main' #if the branch is not main
+      run:  terraform fmt -check
+
+    # Terraform validate on  feature branches
+    - name: Terraform Validate
+      id: validate
+      if: github.ref != 'refs/heads/main'
+            && (success() || failure()) #it runs this command if the previous step was successful or not
+      run:  terraform validate -no-color
 
     # Run a terraform plan for pull requests only
     - name: Terraform Plan
