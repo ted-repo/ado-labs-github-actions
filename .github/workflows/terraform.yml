@@ -38,7 +38,7 @@ jobs:
     - name: Terraform Validate
       id: validate
       if: github.ref != 'refs/heads/main'
-            && (success)() || failure() #it runs this command if the previous step was successful or not
+            && (success() || failure()) #it runs this command if the previous step was successful or not
       run:  terraform validate -no-color
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
