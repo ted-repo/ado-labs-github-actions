@@ -95,7 +95,7 @@ jobs:
             body: output
           })
 
-    # Checkov
+    # Checkov step which is run on pull request.
     - name: Checkov
       if: github.event_name == 'pull_request'
       id: checkov
